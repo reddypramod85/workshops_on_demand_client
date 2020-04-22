@@ -30,7 +30,13 @@ function Register(props) {
   const [notebookErr, setNotebookErr] = useState("");
   const [bookingErr, setBookingErr] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([
+    "Grommet",
+    "RedFish API",
+    "Simplivity API",
+    "Nimble API",
+    "Oneview API"
+  ]);
   const [workshopDesc, setWorkshopDesc] = useState([]);
   const [formIsValid, setFormIsValid] = useState(true);
 
@@ -51,7 +57,7 @@ function Register(props) {
         arrName.push(workshop.name);
         arrDesc.push(workshop.description);
       });
-      setOptions(arrName);
+      if (arrName.length > 0) setOptions(arrName);
       setWorkshopDesc(arrDesc);
     });
 
