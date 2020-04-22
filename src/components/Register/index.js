@@ -8,48 +8,53 @@ import {
   Select,
   Button,
   Calendar,
-  Image
+  Image,
+  Heading
 } from "grommet";
 import { Book } from "grommet-icons";
 import axios from "axios";
-//import dotenv from "dotenv";
-//import PropTypes from "prop-types";
-
-//========================================= Register
-const options = [
-  "Grommet",
-  "Nimble",
-  "OneView",
-  "Simplivity",
-  "RedFish",
-  "HPE Container Platform",
-  "Aruba",
-  "Cray",
-  "Scytale",
-  "Green Lake"
-];
+import { string } from "prop-types";
 
 function Register(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [bookingPeriod, setBookingPeriod] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [bookingPeriodDisable, setBookingPeriodDisable] = useState([]);
-  const [notebookList, setNotebookList] = useState([]);
+  const [workshopList, setWorkshopList] = useState([]);
   const [nameErr, setNameErr] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [companyErr, setCompanyErr] = useState("");
   const [notebookErr, setNotebookErr] = useState("");
   const [bookingErr, setBookingErr] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-
-  //dotenv.config();
+  const [options, setOptions] = useState([]);
+  const [workshopDesc, setWorkshopDesc] = useState([]);
+  const [formIsValid, setFormIsValid] = useState(true);
 
   const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
 
-  const sendEmail = `${apiEndpoint}/sendmail`;
+  const sendEmail = `${apiEndpoint}/api/sendmail`;
+  const getWorkshops = `${apiEndpoint}/api/workshops`;
+  const addCustomer = `${apiEndpoint}/api/customer/create`;
 
   useEffect(() => {
+    axios({
+      method: "GET",
+      url: getWorkshops
+    }).then(response => {
+      let arrName = [];
+      let arrDesc = [];
+      response.data.forEach(workshop => {
+        arrName.push(workshop.name);
+        arrDesc.push(workshop.description);
+      });
+      setOptions(arrName);
+      setWorkshopDesc(arrDesc);
+    });
+
     // code to run on component mount
     const blockPreviousDates = () => {
       var today = new Date(),
@@ -66,33 +71,54 @@ function Register(props) {
       setBookingPeriodDisable(bookingPeriodDisable);
     };
     blockPreviousDates();
-  });
+  }, []);
 
-  const handleValidation = () => {
-    let formIsValid = true;
+  // Escaping regular expression special characters: [ \ ^ $ . | ? * + ( )
+  const getEscapedText = text => text.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 
-    //Name - only letters
-    if (typeof name !== "undefined") {
-      if (!name.match(/^[a-zA-Z]+$/)) {
-        formIsValid = false;
-        setNameErr("Only letters");
+  // Create the regular expression with escaped special characters.
+  const formatSearchExpression = text => {
+    return new RegExp(getEscapedText(text), "i");
+  };
+
+  const onSearch = text => {
+    const exp = formatSearchExpression(text);
+    setOptions(options.filter(option => exp.test(option)));
+  };
+
+  const nameValidation = name => {
+    //Name - only letters and space
+    if (name) {
+      if (!name.match(/^[a-zA-Z\s]+$/)) {
+        setFormIsValid(false);
+        setNameErr("Only letters and space");
       } else {
+        setFormIsValid(true);
         setNameErr("");
       }
+    } else {
+      setFormIsValid(false);
+      setNameErr("Please enter your name");
     }
-
-    //Company - only letters and spaces
-    if (typeof company !== "undefined") {
+  };
+  const companyValidation = company => {
+    //Company - only letters and space
+    if (company) {
       if (!company.match(/^[a-zA-Z\s]+$/)) {
-        formIsValid = false;
+        setFormIsValid(false);
         setCompanyErr("Only letters and space");
       } else {
+        setFormIsValid(true);
         setCompanyErr("");
       }
+    } else {
+      setFormIsValid(false);
+      setCompanyErr("Please enter your company name");
     }
-
+  };
+  const emailValidation = email => {
     //Email
-    if (typeof email !== "undefined") {
+    if (email) {
       const emailtemp = email;
       let lastAtPos = emailtemp.lastIndexOf("@");
       let lastDotPos = emailtemp.lastIndexOf(".");
@@ -106,55 +132,71 @@ function Register(props) {
           emailtemp.length - lastDotPos > 2
         )
       ) {
-        formIsValid = false;
+        setFormIsValid(false);
         setEmailErr("Email is not valid");
       } else {
+        setFormIsValid(true);
         setEmailErr("");
       }
+    } else {
+      setFormIsValid(false);
+      setEmailErr("Please enter your company email");
     }
-
+  };
+  const workshopValidation = workshopList => {
     //Notebooks List - required
-    if (typeof notebookList !== "undefined") {
-      if (notebookList === null || notebookList === "") {
-        formIsValid = false;
-        setNotebookErr("Please fill out this field");
-      } else {
-        setNotebookErr("");
-      }
+    if (Array.isArray(workshopList) && workshopList.length) {
+      setFormIsValid(true);
+      setNotebookErr("");
+    } else {
+      setFormIsValid(false);
+      setNotebookErr("Please select a workshop");
     }
-
+  };
+  const bookingPeriodValidation = bookingPeriod => {
     //Booking Period - required
-    if (typeof bookingPeriod !== "undefined") {
-      if (bookingPeriod === null || bookingPeriod === "") {
-        formIsValid = false;
-        setBookingErr("Please select booking period");
-      } else {
-        setBookingErr("");
-      }
+    if (typeof bookingPeriod === "string" && bookingPeriod) {
+      setBookingErr("");
+      setStartDate(bookingPeriod);
+    } else if (Array.isArray(bookingPeriod) && bookingPeriod.length) {
+      setBookingErr("");
+      setStartDate(bookingPeriod[0][0]);
+      setEndDate(bookingPeriod[0][1]);
+    } else {
+      setFormIsValid(false);
+      setBookingErr("Please select booking period");
     }
-
-    return formIsValid;
   };
 
-  const handleSubmit = e => {
+  const handleValidation = () => {
+    setFormIsValid(true);
+    //Notebooks List - required
+    workshopValidation(workshopList);
+    //Booking Period - required
+    bookingPeriodValidation(bookingPeriod);
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (handleValidation()) {
+    handleValidation();
+    if (formIsValid) {
       axios({
         method: "POST",
-        url: sendEmail,
+        url: addCustomer,
         data: {
           name,
           email,
           company,
-          notebookList,
-          bookingPeriod
+          workshopList,
+          startDate,
+          endDate
         }
       }).then(response => {
-        if (response.data === "success") {
-          setSubmitStatus(true);
-        } else if (response.data === "fail") {
-          setSubmitStatus(true);
+        console.log("response", response);
+        if (response.status >= 400) {
+          return setSubmitStatus(false);
         }
+        setSubmitStatus(true);
       });
     }
   };
@@ -179,6 +221,7 @@ function Register(props) {
         pad="xsmall"
         flex={true}
       >
+        <Heading level="4">Register for Workshops</Heading>
         <Form onSubmit={handleSubmit}>
           <FormField label="Name" error={nameErr}>
             <TextInput
@@ -187,7 +230,10 @@ function Register(props) {
               required={true}
               placeholder="enter your name"
               value={name}
-              onChange={event => setName(event.target.value)}
+              onChange={event => {
+                nameValidation(event.target.value);
+                setName(event.target.value);
+              }}
             />
           </FormField>
           <FormField label="Company" error={companyErr}>
@@ -196,7 +242,10 @@ function Register(props) {
               required={true}
               placeholder="enter your company name"
               value={company}
-              onChange={event => setCompany(event.target.value)}
+              onChange={event => {
+                companyValidation(event.target.value);
+                setCompany(event.target.value);
+              }}
             />
           </FormField>
           <FormField label="Email" error={emailErr}>
@@ -205,20 +254,27 @@ function Register(props) {
               required={true}
               placeholder="enter your company email"
               value={email}
-              onChange={event => setEmail(event.target.value)}
+              onChange={event => {
+                emailValidation(event.target.value);
+                setEmail(event.target.value);
+              }}
             />
           </FormField>
           <FormField label="Workshops" error={notebookErr}>
             <Select
               options={options}
-              //required={true}
               placeholder="select a workshop(s)"
+              //searchPlaceholder="Search workshops"
+              //onSearch={text => onSearch(text)}
               icon={<Book />}
               closeOnChange={false}
               multiple={true}
-              value={notebookList}
-              onChange={event => setNotebookList(event.value)}
-              messages={{ multiple: notebookList.join(",") }}
+              value={workshopList}
+              onChange={event => {
+                workshopValidation(event.value);
+                setWorkshopList(event.value);
+              }}
+              messages={{ multiple: workshopList.join(",") }}
             />
           </FormField>
           <FormField label="Booking period" error={bookingErr}>
@@ -230,7 +286,10 @@ function Register(props) {
               disabled={bookingPeriodDisable}
               animate={false}
               value={bookingPeriod}
-              onSelect={event => setBookingPeriod(event)}
+              onSelect={event => {
+                bookingPeriodValidation(event);
+                setBookingPeriod(event);
+              }}
             />
           </FormField>
           <Box
@@ -265,7 +324,7 @@ function Register(props) {
         <Redirect
           to={{
             pathname: "/success",
-            state: { name, email, company, bookingPeriod, notebookList }
+            state: { name, email, company, startDate, endDate, workshopList }
           }}
         />
       )}

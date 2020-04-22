@@ -26,7 +26,7 @@ const Success = props => {
           justify="center"
           direction="row"
           gap="xlarge"
-          fill="true"
+          fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
             <Text>Name</Text>
@@ -41,7 +41,7 @@ const Success = props => {
           justify="center"
           direction="row"
           gap="xlarge"
-          fill="true"
+          fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
             <Text>Company</Text>
@@ -56,7 +56,7 @@ const Success = props => {
           justify="center"
           direction="row"
           gap="xlarge"
-          fill="true"
+          fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
             <Text>Email</Text>
@@ -65,32 +65,49 @@ const Success = props => {
             <Text>{props.location.state.email}</Text>
           </Box>
         </Box>
+
         <Box
           align="start"
           justify="center"
           direction="row"
           gap="xlarge"
-          fill="true"
+          fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
             <Text>Workshop List</Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.notebookList}</Text>
+            <Text>{props.location.state.workshopList}</Text>
           </Box>
         </Box>
+
         <Box
           align="start"
           justify="center"
           direction="row"
           gap="xlarge"
-          fill="true"
+          fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Booking Period</Text>
+            <Text>Start Date</Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.bookingPeriod}</Text>
+            <Text>{props.location.state.startDate}</Text>
+          </Box>
+        </Box>
+
+        <Box
+          align="start"
+          justify="center"
+          direction="row"
+          gap="xlarge"
+          fill={true}
+        >
+          <Box align="center" justify="center" basis="1/2" direction="row">
+            <Text>End Date</Text>
+          </Box>
+          <Box align="start" justify="start" basis="1/2" direction="row">
+            <Text>{props.location.state.endDate}</Text>
           </Box>
         </Box>
       </Box>

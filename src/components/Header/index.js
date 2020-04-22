@@ -16,7 +16,7 @@ const Header = () => (
     <Hpe color="brand" size="large" />
     <Box align="end" justify="center" direction="column">
       <Text size="xlarge" weight="bold">
-        Hack Shack Workshops On Demand
+        HPE Hack Shack Workshops On Demand
       </Text>
       <Text weight="bold">powered by HPEDEV</Text>
     </Box>
