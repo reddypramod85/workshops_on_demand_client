@@ -20,8 +20,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "docker:build": "docker build -t workshops_on_demand_client .",
+    "docker:clean": "docker rm -f workshops_on_demand_client || true",
+    "docker:run": "docker run -it -p 3000:3000 --name workshops_on_demand_client workshops_on_demand_client",
+    "docker:stop": "docker stop workshops_on_demand_client",
+    "docker:start": "docker start workshops_on_demand_client && yarn run docker:logs",
+    "docker:logs": "docker logs -f workshops_on_demand_client"
   },
   "eslintConfig": {
     "extends": "react-app"
