@@ -164,6 +164,7 @@ function Register(props) {
     if (typeof bookingPeriod === "string" && bookingPeriod) {
       setBookingErr("");
       setStartDate(bookingPeriod);
+      setEndDate(bookingPeriod);
     } else if (Array.isArray(bookingPeriod) && bookingPeriod.length) {
       setBookingErr("");
       setStartDate(bookingPeriod[0][0]);
