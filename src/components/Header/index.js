@@ -1,26 +1,37 @@
 import React from "react";
-import { Box, Text } from "grommet";
+import { Box, Text, Image, Header } from "grommet";
 import { Hpe } from "grommet-icons";
 
 //========================================= Footer
-const Header = () => (
-  <Box
+const AppHeader = () => (
+  <Header
     align="center"
-    justify="center"
-    direction="row-responsive"
-    pad="small"
-    fill="horizontal"
-    gap="medium"
+    direction="row"
     flex={false}
+    justify="between"
+    gap="medium"
+    fill="horizontal"
+    pad="medium"
   >
-    <Hpe color="brand" size="large" />
-    <Box align="end" justify="center" direction="column">
-      <Text size="xlarge" weight="bold">
-        HPE Hack Shack Workshops On Demand
-      </Text>
-      <Text weight="bold">powered by HPEDEV</Text>
+    <Box align="center" justify="center" direction="row" gap="small">
+      <Hpe color="brand" />
+      <Box align="center" justify="center" direction="row" gap="xsmall">
+        <Text weight="bold">HPE</Text>
+        <Text>Hack Shack Workshops On Demand</Text>
+      </Box>
     </Box>
-  </Box>
+    <Box align="center" justify="center" direction="row" gap="xsmall">
+      <Box height="xxsmall" width="xxsmall">
+        <Image
+          fit="contain"
+          size="small"
+          src="https://us-central1-grommet-designer.cloudfunctions.net/images/lozzi-hpe-com/developer-logo.png"
+        ></Image>
+      </Box>
+      <Text>Powered by</Text>
+      <Text weight="bold">HPE DEV</Text>
+    </Box>
+  </Header>
 );
 
-export default Header;
+export default AppHeader;

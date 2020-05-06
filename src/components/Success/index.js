@@ -74,40 +74,10 @@ const Success = props => {
           fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Workshop List</Text>
+            <Text>Workshop</Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.workshopList}</Text>
-          </Box>
-        </Box>
-
-        <Box
-          align="start"
-          justify="center"
-          direction="row"
-          gap="xlarge"
-          fill={true}
-        >
-          <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Start Date</Text>
-          </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.startDate}</Text>
-          </Box>
-        </Box>
-
-        <Box
-          align="start"
-          justify="center"
-          direction="row"
-          gap="xlarge"
-          fill={true}
-        >
-          <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>End Date</Text>
-          </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.endDate}</Text>
+            <Text>{props.location.state.workshop}</Text>
           </Box>
         </Box>
       </Box>

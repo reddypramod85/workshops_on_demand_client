@@ -1,93 +1,56 @@
 import React from "react";
-import { Box, Text, Heading, Anchor, Button } from "grommet";
+import PropTypes from "prop-types";
+import { Anchor, Box, Text, Footer } from "grommet";
 
-//========================================= Footer
-const Footer = () => (
-  <Box
-    align="stretch"
-    justify="center"
-    direction="column"
-    alignSelf="center"
-    wrap={false}
+// import Footer from "./styles";
+
+export const AppFooter = ({ colorIndex }) => (
+  <Footer
+    align="center"
+    direction="row-responsive"
     flex={false}
+    justify="between"
+    gap="medium"
+    fill="horizontal"
+    pad="medium"
+    background={{ color: "background-front" }}
   >
-    <Box
-      align="center"
-      justify="center"
-      direction="row"
-      wrap={false}
-      flex={true}
-      fill="horizontal"
-      pad="medium"
-    >
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        wrap={true}
-        flex={true}
-        basis="1/3"
+    <Text>© 2020 Hewlett Packard Enterprise Development LP</Text>
+    <Box align="center" justify="start" direction="row" gap="small">
+      <Anchor
+        href="https://www.hpe.com/us/en/about/legal/terms-of-use.html"
+        target="_blank"
       >
-        <Text>Stay in the loop</Text>
-        <Heading level="4" textAlign="center" size="small" truncate={false}>
-          Sign up for the HPE Developer Newsletter
-        </Heading>
-        <Anchor
-          href="https://developer.hpe.com/newsletter-signup"
-          target="_blank"
-        >
-           
-          <Button label="Subscribe Now" primary={true} />
-        </Anchor>
-      </Box>
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        overflow="auto"
-        flex={true}
-        basis="1/3"
+        Terms of use
+      </Anchor>
+      <Anchor
+        href="https://www.hpe.com/us/en/legal/privacy.html"
+        target="_blank"
       >
-        <Text>Build with us</Text>
-        <Heading
-          level="4"
-          size="small"
-          textAlign="center"
-          truncate={false}
-          margin="medium"
-        >
-          Contribute to the HPE Developer blog
-        </Heading>
-        <Anchor href="https://developer.hpe.com/signup" target="_blank">
-           
-          <Button label="Contribute" primary={true} />
-        </Anchor>
-      </Box>
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        overflow="auto"
-        flex={true}
-        basis="1/3"
+        Privacy
+      </Anchor>
+      <Anchor
+        href="https://www.hpe.com/us/en/legal/privacy.html#datacollection"
+        target="_blank"
       >
-        <Text>Connect and code</Text>
-        <Heading
-          level="4"
-          size="small"
-          textAlign="center"
-          truncate={false}
-          margin="medium"
-        >
-          Join the HPE Developer Slack Community
-        </Heading>
-        <Anchor href="https://slack.hpedev.io/" target="_blank">
-           
-          <Button label="Join Now" primary={true} />
-        </Anchor>
-      </Box>
+        Cookies
+      </Anchor>
+      <Anchor
+        href="https://www.hpe.com/us/en/privacy/personal-information.html"
+        target="_blank"
+      >
+        Do Not Sell My Personal Information
+      </Anchor>
     </Box>
-  </Box>
+  </Footer>
 );
 
-export default Footer;
+AppFooter.propTypes = {
+  colorIndex: PropTypes.oneOf(["neutral-1", "light-2"])
+};
+
+AppFooter.defaultProps = {
+  colorIndex: "neutral-1"
+};
+
+export default AppFooter;

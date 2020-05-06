@@ -5,105 +5,66 @@ import {
   Form,
   FormField,
   TextInput,
-  Select,
   Button,
-  Calendar,
-  Image,
-  Heading
+  Heading,
+  Header
 } from "grommet";
-import { Book } from "grommet-icons";
 import axios from "axios";
-import { string } from "prop-types";
+import { ListItem } from "../../components";
 
-function Register(props) {
+const Register = props => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [bookingPeriod, setBookingPeriod] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [bookingPeriodDisable, setBookingPeriodDisable] = useState([]);
-  const [workshopList, setWorkshopList] = useState([]);
+  const [workshop, setWorkshop] = useState("");
   const [nameErr, setNameErr] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [companyErr, setCompanyErr] = useState("");
-  const [notebookErr, setNotebookErr] = useState("");
-  const [bookingErr, setBookingErr] = useState("");
+  const [workshopErr, setWorkshopErr] = useState("");
+  const [error, setError] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-  const [options, setOptions] = useState([
-    "Grommet",
-    "RedFish API",
-    "Simplivity API",
-    "Nimble API",
-    "Oneview API"
-  ]);
-  const [workshopDesc, setWorkshopDesc] = useState([]);
-  const [formIsValid, setFormIsValid] = useState(true);
+  const [workshopNameDesc, setWorkshopNameDesc] = useState([]);
 
   const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
-
-  const sendEmail = `${apiEndpoint}/api/sendmail`;
   const getWorkshops = `${apiEndpoint}/api/workshops`;
   const addCustomer = `${apiEndpoint}/api/customer/create`;
+
+  let formIsValid = false;
 
   useEffect(() => {
     axios({
       method: "GET",
       url: getWorkshops
-    }).then(response => {
-      let arrName = [];
-      let arrDesc = [];
-      response.data.forEach(workshop => {
-        arrName.push(workshop.name);
-        arrDesc.push(workshop.description);
+    })
+      .then(response => {
+        let arr = [];
+
+        // Map created
+        response.data.forEach(workshop => {
+          arr.push({ ...workshop });
+        });
+        setWorkshopNameDesc([...workshopNameDesc, ...arr]);
+      })
+      .catch(error => {
+        if (!error.response) {
+          // network error
+          setError(`Error submitting ${getWorkshops}.`);
+        } else {
+          // this.errorStatus = error.response.data.message;
+          setError(error.response.data.message);
+        }
       });
-      if (arrName.length > 0) setOptions(arrName);
-      setWorkshopDesc(arrDesc);
-    });
-
-    // code to run on component mount
-    const blockPreviousDates = () => {
-      var today = new Date(),
-        todaysDate =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          (today.getDate() - 1);
-
-      const startdate = ["2000-01-01"];
-      startdate.push(todaysDate);
-      bookingPeriodDisable.push(startdate);
-      setBookingPeriodDisable(bookingPeriodDisable);
-    };
-    blockPreviousDates();
   }, []);
-
-  // Escaping regular expression special characters: [ \ ^ $ . | ? * + ( )
-  const getEscapedText = text => text.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
-
-  // Create the regular expression with escaped special characters.
-  const formatSearchExpression = text => {
-    return new RegExp(getEscapedText(text), "i");
-  };
-
-  const onSearch = text => {
-    const exp = formatSearchExpression(text);
-    setOptions(options.filter(option => exp.test(option)));
-  };
 
   const nameValidation = name => {
     //Name - only letters and space
     if (name) {
       if (!name.match(/^[a-zA-Z\s]+$/)) {
-        setFormIsValid(false);
         setNameErr("Only letters and space");
       } else {
-        setFormIsValid(true);
         setNameErr("");
       }
     } else {
-      setFormIsValid(false);
       setNameErr("Please enter your name");
     }
   };
@@ -111,14 +72,11 @@ function Register(props) {
     //Company - only letters and space
     if (company) {
       if (!company.match(/^[a-zA-Z\s]+$/)) {
-        setFormIsValid(false);
         setCompanyErr("Only letters and space");
       } else {
-        setFormIsValid(true);
         setCompanyErr("");
       }
     } else {
-      setFormIsValid(false);
       setCompanyErr("Please enter your company name");
     }
   };
@@ -138,54 +96,33 @@ function Register(props) {
           emailtemp.length - lastDotPos > 2
         )
       ) {
-        setFormIsValid(false);
         setEmailErr("Email is not valid");
       } else {
-        setFormIsValid(true);
         setEmailErr("");
       }
     } else {
-      setFormIsValid(false);
       setEmailErr("Please enter your company email");
     }
   };
-  const workshopValidation = workshopList => {
+  const workshopValidation = async workshop => {
     //Notebooks List - required
-    if (Array.isArray(workshopList) && workshopList.length) {
-      setFormIsValid(true);
-      setNotebookErr("");
+    if (workshop) {
+      formIsValid = true;
+      setWorkshopErr("");
     } else {
-      setFormIsValid(false);
-      setNotebookErr("Please select a workshop");
-    }
-  };
-  const bookingPeriodValidation = bookingPeriod => {
-    //Booking Period - required
-    if (typeof bookingPeriod === "string" && bookingPeriod) {
-      setBookingErr("");
-      setStartDate(bookingPeriod);
-      setEndDate(bookingPeriod);
-    } else if (Array.isArray(bookingPeriod) && bookingPeriod.length) {
-      setBookingErr("");
-      setStartDate(bookingPeriod[0][0]);
-      setEndDate(bookingPeriod[0][1]);
-    } else {
-      setFormIsValid(false);
-      setBookingErr("Please select booking period");
+      formIsValid = false;
+      setWorkshopErr("Please select a workshop");
     }
   };
 
-  const handleValidation = () => {
-    setFormIsValid(true);
-    //Notebooks List - required
-    workshopValidation(workshopList);
-    //Booking Period - required
-    bookingPeriodValidation(bookingPeriod);
+  const handleValidation = async () => {
+    //Workshop - required
+    await workshopValidation(workshop);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    handleValidation();
+    await handleValidation();
     if (formIsValid) {
       axios({
         method: "POST",
@@ -194,17 +131,25 @@ function Register(props) {
           name,
           email,
           company,
-          workshopList,
-          startDate,
-          endDate
+          workshop
         }
-      }).then(response => {
-        console.log("response", response);
-        if (response.status >= 400) {
-          return setSubmitStatus(false);
-        }
-        setSubmitStatus(true);
-      });
+      })
+        .then(response => {
+          console.log("response", response);
+          if (response.status >= 400) {
+            return setSubmitStatus(false);
+          }
+          setSubmitStatus(true);
+        })
+        .catch(error => {
+          if (!error.response) {
+            // network error
+            setError(`Error submitting ${addCustomer}.`);
+          } else {
+            // this.errorStatus = error.response.data.message;
+            setError(error.response.data.message);
+          }
+        });
     }
   };
 
@@ -213,27 +158,39 @@ function Register(props) {
       align="center"
       justify="between"
       direction="row-responsive"
-      background={{ color: "background-front" }}
+      background="background-front"
+      border
       wrap={false}
       overflow="auto"
       fill="horizontal"
       flex="grow"
-      pad="large"
+      pad={{ horizontal: "medium", vertical: "medium" }}
     >
       <Box
-        align="stretch"
-        justify="start"
+        align="center"
+        justify="center"
         fill={true}
-        direction="column"
-        pad="xsmall"
-        flex={true}
+        // direction="column"
+        pad="medium"
       >
-        <Heading level="4">Register for Workshops</Heading>
+        <Header
+          direction="column"
+          align="start"
+          gap="xxsmall"
+          pad={{ horizontal: "xxsmall" }}
+        >
+          <Heading level={3} margin="none">
+            Register for a Workshop
+          </Heading>
+        </Header>
+        <Box
+          // Padding used to prevent focus from being cutoff
+          pad={{ horizontal: "xxsmall" }}
+        ></Box>
+        {error}
         <Form onSubmit={handleSubmit}>
           <FormField label="Name" error={nameErr}>
             <TextInput
-              size="large"
-              type="text"
               required={true}
               placeholder="enter your name"
               value={name}
@@ -245,7 +202,6 @@ function Register(props) {
           </FormField>
           <FormField label="Company" error={companyErr}>
             <TextInput
-              type="text"
               required={true}
               placeholder="enter your company name"
               value={company}
@@ -267,37 +223,20 @@ function Register(props) {
               }}
             />
           </FormField>
-          <FormField label="Workshops" error={notebookErr}>
-            <Select
-              options={options}
-              placeholder="select a workshop(s)"
-              //searchPlaceholder="Search workshops"
-              //onSearch={text => onSearch(text)}
-              icon={<Book />}
-              closeOnChange={false}
-              multiple={true}
-              value={workshopList}
-              onChange={event => {
-                workshopValidation(event.value);
-                setWorkshopList(event.value);
-              }}
-              messages={{ multiple: workshopList.join(",") }}
-            />
-          </FormField>
-          <FormField label="Booking period" error={bookingErr}>
-            <Calendar
-              daysOfWeek={true}
-              range={true}
-              size="small"
-              required={true}
-              disabled={bookingPeriodDisable}
-              animate={false}
-              value={bookingPeriod}
-              onSelect={event => {
-                bookingPeriodValidation(event);
-                setBookingPeriod(event);
-              }}
-            />
+          <FormField label="Workshops" error={workshopErr}>
+            <Box pad="xsmall" gap="xsmall">
+              {workshopNameDesc &&
+                workshopNameDesc.length &&
+                workshopNameDesc.map(workshopData => (
+                  <ListItem
+                    key={workshopData.name}
+                    workshopNameDesc={workshopData}
+                    setWorkshop={setWorkshop}
+                    setWorkshopErr={setWorkshopErr}
+                    workshop={workshop}
+                  />
+                ))}
+            </Box>
           </FormField>
           <Box
             align="start"
@@ -307,7 +246,7 @@ function Register(props) {
             pad="small"
           >
             <Button
-              label="Submit"
+              label="Register"
               type="submit"
               hoverIndicator={true}
               primary={true}
@@ -317,7 +256,7 @@ function Register(props) {
           </Box>
         </Form>
       </Box>
-      <Box
+      {/* <Box
         align="center"
         justify="center"
         direction="column"
@@ -326,17 +265,23 @@ function Register(props) {
         round="medium"
       >
         <Image src="/img/gremlin-rockin.svg" />
-      </Box>
+      </Box> */}
+
       {submitStatus && (
         <Redirect
           to={{
             pathname: "/success",
-            state: { name, email, company, startDate, endDate, workshopList }
+            state: {
+              name,
+              email,
+              company, //startDate, endDate,
+              //workshopList,
+              workshop
+            }
           }}
         />
       )}
     </Box>
   );
-}
-
+};
 export default Register;
