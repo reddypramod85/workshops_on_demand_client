@@ -7,27 +7,36 @@ import {
   Heading,
   Header,
   Paragraph,
-  RadioButton
+  RadioButton,
+  Text
 } from "grommet";
 import { Close, StatusInfo } from "grommet-icons";
 
 const ListItem = props => {
   const [open, setOpen] = useState();
   const onOpen = () => setOpen(true);
+  let disabled = false;
 
   const onClose = () => setOpen(undefined);
+
+  if (props.workshopNameDesc.capacity <= 0) disabled = true;
+
   return (
     <Box direction="row" align="center" gap="small">
       <RadioButton
         name={props.workshopNameDesc.name}
         label={props.workshopNameDesc.name}
         checked={props.workshopNameDesc.name === props.workshop}
+        disabled={disabled}
         onChange={event => {
           props.setWorkshop(props.workshopNameDesc.name);
           props.setWorkshopErr("");
         }}
       />
       <Button icon={<StatusInfo />} onClick={onOpen} />
+      {disabled && (
+        <Text color="status-critical"> Currently unavailable. Try later</Text>
+      )}
       {open && (
         <Layer
           animate={true}
