@@ -7,7 +7,8 @@ import {
   TextInput,
   Button,
   Heading,
-  Header
+  Header,
+  Text
 } from "grommet";
 import axios from "axios";
 import { ListItem } from "../../components";
@@ -26,34 +27,38 @@ const Register = props => {
   const [workshopNameDesc, setWorkshopNameDesc] = useState([]);
 
   const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
-  const getWorkshops = `${apiEndpoint}/api/workshops`;
+  const getWorkshopsApi = `${apiEndpoint}/api/workshops`;
   const addCustomer = `${apiEndpoint}/api/customer/create`;
 
   let formIsValid = false;
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: getWorkshops
-    })
-      .then(response => {
-        let arr = [];
-
-        // Map created
-        response.data.forEach(workshop => {
-          arr.push({ ...workshop });
-        });
-        setWorkshopNameDesc([...workshopNameDesc, ...arr]);
+    const getWorkshops = () => {
+      axios({
+        method: "GET",
+        url: getWorkshopsApi
       })
-      .catch(error => {
-        if (!error.response) {
-          // network error
-          setError(`Error submitting ${getWorkshops}.`);
-        } else {
-          // this.errorStatus = error.response.data.message;
-          setError(error.response.data.message);
-        }
-      });
+        .then(response => {
+          let arr = [];
+
+          // Map created
+          response.data.forEach(workshop => {
+            arr.push({ ...workshop });
+          });
+          setWorkshopNameDesc([...workshopNameDesc, ...arr]);
+        })
+        .catch(error => {
+          if (!error.response) {
+            // network error
+            setError(`Error submitting ${getWorkshopsApi}.`);
+          } else {
+            // this.errorStatus = error.response.data.message;
+            setError(error.response.data.message);
+          }
+        });
+    };
+    getWorkshops();
+    // eslint-disable-next-line
   }, []);
 
   const nameValidation = name => {
@@ -138,6 +143,9 @@ const Register = props => {
           console.log("response", response);
           if (response.status >= 400) {
             return setSubmitStatus(false);
+          } else if (response.status > 200) {
+            setError(response.data);
+            return setSubmitStatus(false);
           }
           setSubmitStatus(true);
         })
@@ -187,7 +195,6 @@ const Register = props => {
           // Padding used to prevent focus from being cutoff
           pad={{ horizontal: "xxsmall" }}
         ></Box>
-        {error}
         <Form onSubmit={handleSubmit}>
           <FormField label="Name" error={nameErr}>
             <TextInput
@@ -238,6 +245,17 @@ const Register = props => {
                 ))}
             </Box>
           </FormField>
+          {error && (
+            <Box
+              align="center"
+              justify="center"
+              direction="row-responsive"
+              pad="small"
+              background="status-critical"
+            >
+              <Text>{error}</Text>
+            </Box>
+          )}
           <Box
             align="start"
             justify="center"
