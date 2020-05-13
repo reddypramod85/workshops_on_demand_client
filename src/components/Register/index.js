@@ -18,6 +18,7 @@ const Register = props => {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [workshop, setWorkshop] = useState("");
+  const [jupyterWorkshop, setJupyterWorkshop] = useState("");
   const [nameErr, setNameErr] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [companyErr, setCompanyErr] = useState("");
@@ -28,11 +29,39 @@ const Register = props => {
 
   const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
   const getWorkshopsApi = `${apiEndpoint}/api/workshops`;
+  // const getCustomerApi = `${apiEndpoint}/api/workshops`;
   const addCustomer = `${apiEndpoint}/api/customer/create`;
 
   let formIsValid = false;
 
   useEffect(() => {
+    // const getWorkshopEnd = () => {
+    //   axios({
+    //     method: "GET",
+    //     url: getWorkshopsApi
+    //   })
+    //     .then(response => {
+    //       let arr = [];
+
+    //       // Map created
+    //       response.data.forEach(workshop => {
+    //         if (workshop.capacity <= 0) {
+    //           getWorkshops();
+    //         }
+    //         arr.push({ ...workshop });
+    //       });
+    //       setWorkshopNameDesc([...workshopNameDesc, ...arr]);
+    //     })
+    //     .catch(error => {
+    //       if (!error.response) {
+    //         // network error
+    //         setError(`Error submitting ${getWorkshopsApi}.`);
+    //       } else {
+    //         // this.errorStatus = error.response.data.message;
+    //         setError(error.response.data.message);
+    //       }
+    //     });
+    // };
     const getWorkshops = () => {
       axios({
         method: "GET",
@@ -43,6 +72,9 @@ const Register = props => {
 
           // Map created
           response.data.forEach(workshop => {
+            // if (workshop.capacity <= 0) {
+            //   getWorkshopEnd();
+            // }
             arr.push({ ...workshop });
           });
           setWorkshopNameDesc([...workshopNameDesc, ...arr]);
@@ -136,7 +168,8 @@ const Register = props => {
           name,
           email,
           company,
-          workshop
+          workshop,
+          jupyterWorkshop
         }
       })
         .then(response => {
@@ -196,6 +229,18 @@ const Register = props => {
           pad={{ horizontal: "xxsmall" }}
         ></Box>
         <Form onSubmit={handleSubmit}>
+          <FormField label="Email" error={emailErr}>
+            <TextInput
+              type="text"
+              required={true}
+              placeholder="enter your company email"
+              value={email}
+              onChange={event => {
+                emailValidation(event.target.value);
+                setEmail(event.target.value);
+              }}
+            />
+          </FormField>
           <FormField label="Name" error={nameErr}>
             <TextInput
               required={true}
@@ -218,18 +263,6 @@ const Register = props => {
               }}
             />
           </FormField>
-          <FormField label="Email" error={emailErr}>
-            <TextInput
-              type="text"
-              required={true}
-              placeholder="enter your company email"
-              value={email}
-              onChange={event => {
-                emailValidation(event.target.value);
-                setEmail(event.target.value);
-              }}
-            />
-          </FormField>
           <FormField label="Workshops" error={workshopErr}>
             <Box pad="xsmall" gap="xsmall">
               {workshopNameDesc &&
@@ -239,8 +272,10 @@ const Register = props => {
                     key={workshopData.name}
                     workshopNameDesc={workshopData}
                     setWorkshop={setWorkshop}
+                    setJupyterWorkshop={setJupyterWorkshop}
                     setWorkshopErr={setWorkshopErr}
                     workshop={workshop}
+                    jupyterWorkshop={jupyterWorkshop}
                   />
                 ))}
             </Box>
