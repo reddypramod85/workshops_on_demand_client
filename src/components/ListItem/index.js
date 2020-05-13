@@ -18,7 +18,7 @@ const ListItem = props => {
   let disabled = false;
 
   const onClose = () => setOpen(undefined);
-
+  console.log("jupyter name", props.workshopNameDesc.jupyterName);
   if (props.workshopNameDesc.capacity <= 0) disabled = true;
 
   return (
@@ -30,6 +30,7 @@ const ListItem = props => {
         disabled={disabled}
         onChange={event => {
           props.setWorkshop(props.workshopNameDesc.name);
+          props.setJupyterWorkshop(props.workshopNameDesc.jupyterName);
           props.setWorkshopErr("");
         }}
       />
