@@ -29,7 +29,9 @@ const Success = props => {
           fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Name</Text>
+            <Text>
+              <strong>Name</strong>
+            </Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
             <Text>{props.location.state.name}</Text>
@@ -44,7 +46,9 @@ const Success = props => {
           fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Company</Text>
+            <Text>
+              <strong>Company</strong>
+            </Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
             <Text>{props.location.state.company}</Text>
@@ -59,7 +63,9 @@ const Success = props => {
           fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Email</Text>
+            <Text>
+              <strong>Email</strong>
+            </Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
             <Text>{props.location.state.email}</Text>
@@ -74,7 +80,9 @@ const Success = props => {
           fill={true}
         >
           <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>Workshop</Text>
+            <Text>
+              <strong>Workshop</strong>
+            </Text>
           </Box>
           <Box align="start" justify="start" basis="1/2" direction="row">
             <Text>{props.location.state.workshop}</Text>
