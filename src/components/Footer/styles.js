@@ -1,20 +1,8 @@
 import styled from "styled-components";
-import AppFooter from "grommet/components/Footer2";
+import { Anchor } from "grommet";
 
-export const Footer = styled(AppFooter)`
-  a {
-    text-decoration: none;
-  }
-  svg {
-    width: 128px;
-    height: 48px;
-    path:first-child {
-      fill: ${props => (props.colorIndex === "neutral-1" ? "white" : "#333")};
-    }
-  }
-  & > div {
-    max-width: 1400px;
-  }
+const StyledAnchor = styled(Anchor)`
+  text-decoration: none;
 `;
 
-export default Footer;
+export default StyledAnchor;

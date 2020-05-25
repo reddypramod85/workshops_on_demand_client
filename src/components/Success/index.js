@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Text, Button } from "grommet";
 import { Link } from "react-router-dom";
+import { Validate, FormClose } from "grommet-icons";
 
 const Success = props => {
   return (
@@ -11,84 +12,101 @@ const Success = props => {
       round="medium"
       background={{ color: "background-front" }}
       pad="xsmall"
-      fill={true}
+      fill
     >
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        margin={{ top: "large" }}
-        gap="small"
-        fill={true}
-      >
+      {props && Object.keys(props).length !== 0 ? (
         <Box
-          align="start"
+          align="center"
           justify="center"
-          direction="row"
-          gap="xlarge"
+          direction="column"
+          margin={{ top: "large" }}
+          gap="small"
           fill={true}
         >
-          <Box align="center" justify="center" basis="1/2" direction="row">
+          <Box direction="row" gap="small">
+            <Validate color="brand"></Validate>
             <Text>
-              <strong>Name</strong>
+              Your workshop registration was successful. Please check your email
+              for more details.
             </Text>
           </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.name}</Text>
-          </Box>
-        </Box>
 
-        <Box
-          align="start"
-          justify="center"
-          direction="row"
-          gap="xlarge"
-          fill={true}
-        >
-          <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>
-              <strong>Company</strong>
-            </Text>
+          <Box
+            align="start"
+            justify="center"
+            direction="row"
+            gap="xlarge"
+            fill={true}
+          >
+            <Box align="center" justify="center" basis="1/2" direction="row">
+              <Text>
+                <strong>Name</strong>
+              </Text>
+            </Box>
+            <Box align="start" justify="start" basis="1/2" direction="row">
+              <Text>{props.location.state.name}</Text>
+            </Box>
           </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.company}</Text>
-          </Box>
-        </Box>
 
-        <Box
-          align="start"
-          justify="center"
-          direction="row"
-          gap="xlarge"
-          fill={true}
-        >
-          <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>
-              <strong>Email</strong>
-            </Text>
+          <Box
+            align="start"
+            justify="center"
+            direction="row"
+            gap="xlarge"
+            fill={true}
+          >
+            <Box align="center" justify="center" basis="1/2" direction="row">
+              <Text>
+                <strong>Company</strong>
+              </Text>
+            </Box>
+            <Box align="start" justify="start" basis="1/2" direction="row">
+              <Text>{props.location.state.company}</Text>
+            </Box>
           </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.email}</Text>
-          </Box>
-        </Box>
 
-        <Box
-          align="start"
-          justify="center"
-          direction="row"
-          gap="xlarge"
-          fill={true}
-        >
-          <Box align="center" justify="center" basis="1/2" direction="row">
-            <Text>
-              <strong>Workshop</strong>
-            </Text>
+          <Box
+            align="start"
+            justify="center"
+            direction="row"
+            gap="xlarge"
+            fill={true}
+          >
+            <Box align="center" justify="center" basis="1/2" direction="row">
+              <Text>
+                <strong>Email</strong>
+              </Text>
+            </Box>
+            <Box align="start" justify="start" basis="1/2" direction="row">
+              <Text>{props.location.state.email}</Text>
+            </Box>
           </Box>
-          <Box align="start" justify="start" basis="1/2" direction="row">
-            <Text>{props.location.state.workshop}</Text>
+
+          <Box
+            align="start"
+            justify="center"
+            direction="row"
+            gap="xlarge"
+            fill={true}
+          >
+            <Box align="center" justify="center" basis="1/2" direction="row">
+              <Text>
+                <strong>Workshop</strong>
+              </Text>
+            </Box>
+            <Box align="start" justify="start" basis="1/2" direction="row">
+              <Text>{props.location.state.workshop}</Text>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box direction="row" align="center" justify="center" gap="small">
+          <FormClose color="status-critical"></FormClose>
+          <Text>
+            Your workshop registration was unsuccessful. Please register again.
+          </Text>
+        </Box>
+      )}
       <Box align="center" justify="start" gap="small" pad="medium">
         <Link to="/">
           <Button label="Register More Workshops" primary={true} />

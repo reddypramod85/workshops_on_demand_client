@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Anchor, Box, Text, Footer } from "grommet";
+import { Box, Text, Footer } from "grommet";
 
-// import Footer from "./styles";
+import StyledAnchor from "./styles";
 
 export const AppFooter = ({ colorIndex }) => (
   <Footer
@@ -17,30 +17,28 @@ export const AppFooter = ({ colorIndex }) => (
   >
     <Text>© 2020 Hewlett Packard Enterprise Development LP</Text>
     <Box align="center" justify="start" direction="row" gap="small">
-      <Anchor
+      <StyledAnchor
         href="https://www.hpe.com/us/en/about/legal/terms-of-use.html"
         target="_blank"
-      >
-        Terms of use
-      </Anchor>
-      <Anchor
+        label="Terms of use"
+      />
+      <StyledAnchor
         href="https://www.hpe.com/us/en/legal/privacy.html"
         target="_blank"
-      >
-        Privacy
-      </Anchor>
-      <Anchor
+        label="Privacy"
+      />
+
+      <StyledAnchor
         href="https://www.hpe.com/us/en/legal/privacy.html#datacollection"
         target="_blank"
-      >
-        Cookies
-      </Anchor>
-      <Anchor
+        label="Cookies"
+      />
+
+      <StyledAnchor
         href="https://www.hpe.com/us/en/privacy/personal-information.html"
         target="_blank"
-      >
-        Do Not Sell My Personal Information
-      </Anchor>
+        label="Do Not Sell My Personal Information"
+      />
     </Box>
   </Footer>
 );

@@ -1,5 +1,5 @@
 {
-  "name": "notebook_on_demand",
+  "name": "workshops-on-demand",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,9 +8,9 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "grommet": "^2.11.2",
+    "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "grommet-icons": "^4.4.0",
-    "grommet-theme-hpe": "^1.0.5",
+    "grommet-theme-hpe": "https://github.com/grommet/grommet-theme-hpe/tarball/NEXT-stable",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",

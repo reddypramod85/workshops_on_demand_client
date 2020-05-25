@@ -18,7 +18,6 @@ const ListItem = props => {
   let disabled = false;
 
   const onClose = () => setOpen(undefined);
-  console.log("jupyter name", props.workshopNameDesc.jupyterName);
   if (props.workshopNameDesc.capacity <= 0) disabled = true;
 
   return (
@@ -29,9 +28,15 @@ const ListItem = props => {
         checked={props.workshopNameDesc.name === props.workshop}
         disabled={disabled}
         onChange={event => {
-          props.setWorkshop(props.workshopNameDesc.name);
-          props.setJupyterWorkshop(props.workshopNameDesc.jupyterName);
-          props.setWorkshopErr("");
+          props.setFormValues(prevState => ({
+            ...prevState,
+            workshop: props.workshopNameDesc.name,
+            jupyterWorkshop: props.workshopNameDesc.jupyterName
+          }));
+          props.setCustomError(prevState => ({
+            ...prevState,
+            workshopErr: ""
+          }));
         }}
       />
       <Button icon={<StatusInfo />} onClick={onOpen} />

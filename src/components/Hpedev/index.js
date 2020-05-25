@@ -1,72 +1,36 @@
 import React from "react";
-import { Box, Text, Heading, Anchor, Button } from "grommet";
+import { Box, Text, Heading, Button } from "grommet";
 
 //========================================= Footer
 const Hpedev = () => (
-  <Box
-    // align="stretch"
-    justify="center"
-    direction="column"
-    alignSelf="center"
-    flex={false}
-  >
-    <Box
-      align="center"
-      justify="between"
-      direction="row"
-      fill="horizontal"
-      pad="small"
-    >
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        // overflow="auto"
-        basis="1/3"
-      >
+  <Box direction="column" flex>
+    <Box direction="row" fill="horizontal" pad="small">
+      <Box align="center" justify="between" direction="column" basis="1/3">
         <Text>Stay in the loop</Text>
-        <Heading level="4" textAlign="center" truncate={false} margin="medium">
+        <Heading level="4" textAlign="center">
           Sign up for the HPE Developer Newsletter
         </Heading>
-        <Anchor
+         
+        <Button
+          label="Subscribe Now"
           href="https://developer.hpe.com/newsletter-signup"
-          target="_blank"
-        >
-           
-          <Button label="Subscribe Now" primary={true} />
-        </Anchor>
+        />
       </Box>
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        // overflow="auto"
-        basis="1/3"
-      >
+      <Box align="center" justify="between" direction="column" basis="1/3">
         <Text>Build with us</Text>
-        <Heading level="4" textAlign="center" truncate={false} margin="medium">
+        <Heading level="4" textAlign="center">
           Contribute to the HPE Developer blog
         </Heading>
-        <Anchor href="https://developer.hpe.com/signup" target="_blank">
-           
-          <Button label="Contribute" primary={true} />
-        </Anchor>
+         
+        <Button label="Subscribe Now" href="https://developer.hpe.com/signup" />
       </Box>
-      <Box
-        align="center"
-        justify="center"
-        direction="column"
-        // overflow="auto"
-        basis="1/3"
-      >
+      <Box align="center" justify="between" direction="column" basis="1/3">
         <Text>Connect and code</Text>
-        <Heading level="4" textAlign="center" truncate={false} margin="medium">
+        <Heading level="4" textAlign="center">
           Join the HPE Developer Slack Community
         </Heading>
-        <Anchor href="https://slack.hpedev.io/" target="_blank">
-           
-          <Button label="Join Now" primary={true} />
-        </Anchor>
+         
+        <Button label="Join Now" href="https://slack.hpedev.io/" />
       </Box>
     </Box>
   </Box>
